@@ -20,7 +20,7 @@ event zeek_init(){
 			local r404r=result["404_response"];
 			local r404url=result["404_url"];
 
-			if(r404r$sum>2 && r404r$sum/rall$sum>0.2 && r404url$sum/r404r$sum>0.5){
+			if(r404r$num>2 && r404r$num/rall$num>0.2 && r404url$num/r404r$num>0.5){
 				print fmt("%s is a scanner with %s scan attemps on %s urls",key$host,r404r$num,r404url$num);
 			}
 		}
