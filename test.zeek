@@ -1,3 +1,5 @@
+@load base/frameworks/sumstats
+
 event http_reply(c:connection,version:string,code:count,reason:string){
 	SumStats::observe("all_response",SumStats::Key(),SumStats::Observation($num=1));
 	if(code==404){
