@@ -1,10 +1,10 @@
 @load base/frameworks/sumstats
 
 event http_reply(c:connection, version:string, code:count, reason:string){
-	SumStats::observe("all_response", SumStats::Key(), SumStats::Observation($num = 1));
+	SumStats::observe("all_response", SumStats::Key($host=c$id$orig_h), SumStats::Observation($num = 1));
 	if(code == 404){
-		SumStats::observe("404_response", SumStats::Key(), SumStats::Observation($num = 1));
-		SumStats::observe("404_url", SumStats::Key($host=c$id$resp_h), SumStats::Observation($str = c$http$uri));
+		SumStats::observe("404_response", SumStats::Key($host=c$id$orig_h), SumStats::Observation($num = 1));
+		SumStats::observe("404_url", SumStats::Key($host=c$id$orig_h), SumStats::Observation($str = c$http$uri));
 	}
 }
 
@@ -22,8 +22,8 @@ event zeek_init(){
 			local r404r = result["404_response"];
 			local r404url = result["404_url"];
 
-			if(r404r$num > 2 && r404r$num/rall$num > 0.2 && r404url$num/r404r$num > 0.5){
-				print fmt("%s is a scanner with %s scan attemps on %s urls", key$host, r404r$num, r404url$num);
+			if(r404r$sum > 2 && r404r$sum/rall$sum > 0.2 && r404url$sum/r404r$sum > 0.5){
+				print fmt("%s is a scanner with %s scan attemps on %s urls", key$host, r404r$sum, r404url$sum);
 			}
 		}
 	]);
